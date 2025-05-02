@@ -4,12 +4,13 @@ export const getScriptData = (): [string, (viewer: Viewer) => void] => {
   const scripts = document.getElementsByTagName("script");
   const script = Array.from(scripts).find(
     (script) =>
-      script.hasAttribute("viewer-callback") && script.hasAttribute("viewer-id")
+      script.hasAttribute("viewer-callback") &&
+      script.hasAttribute("viewer-id"),
   );
 
   if (!script) {
     throw new Error(
-      "Couldn't find script with attribute `viewer-callback` or `viewer-id`"
+      "Couldn't find script with attribute `viewer-callback` or `viewer-id`",
     );
   }
 
