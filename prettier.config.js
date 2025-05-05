@@ -1,7 +1,6 @@
-import { type Config } from "prettier";
 import glsl from "prettier-plugin-glsl";
 
-const config: Config = {
+const config = {
   overrides: [{ files: ["*.frag"], options: { parser: "glsl-parser" } }],
   plugins: [glsl],
 };

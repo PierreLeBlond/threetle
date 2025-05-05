@@ -1,8 +1,8 @@
 import fragmentShaderSource from "./shaders/triangle.frag?raw";
 import vertexShaderSource from "./shaders/triangle.vert?raw";
-import { WebGLCoreData } from "./WebGLCore";
+import { WebGLRendererData } from "./WebGLRendererData";
 
-export const createTriangle = (data: WebGLCoreData): WebGLCoreData => {
+export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   const { gl } = data;
 
   const vertexBuffer = gl.createBuffer();

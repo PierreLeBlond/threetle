@@ -1,19 +1,19 @@
-import { WebGLCore } from "../core/webgl/WebGLCore";
+import { getRenderer } from "./getRenderer";
 
-export const init = (element: HTMLElement) => {
-  let data = WebGLCore.init();
+export const init = async (element: HTMLElement) => {
+  const renderer = await getRenderer();
 
-  const { canvas } = data;
+  const canvas = renderer.getCanvas();
 
   element.appendChild(canvas);
 
   canvas.width = element.clientWidth;
   canvas.height = element.clientHeight;
 
-  data = WebGLCore.createTriangle(data);
+  renderer.createTriangle();
 
   const loop = () => {
-    WebGLCore.draw(data);
+    renderer.draw();
 
     requestAnimationFrame(loop);
   };

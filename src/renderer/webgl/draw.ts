@@ -1,26 +1,17 @@
 import { mat4 } from "gl-matrix";
 
-import { WebGLCoreData } from "./WebGLCore";
+import { WebGLRendererData } from "./WebGLRendererData";
 
-export const draw = (coreData: WebGLCoreData) => {
-  const { buffers, canvas, gl, programInfo } = coreData;
+export const draw = (rendererData: WebGLRendererData) => {
+  const { buffers, canvas, gl, programInfo } = rendererData;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-  const fieldOfView = (45 * Math.PI) / 180;
-  const aspect = canvas.clientWidth / canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
   const projectionMatrix = mat4.create();
-
-  mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
   const viewMatrix = mat4.create();
-
-  mat4.translate(viewMatrix, viewMatrix, [-0.0, 0.0, -6.0]);
 
   if (!buffers || !programInfo) {
     return;

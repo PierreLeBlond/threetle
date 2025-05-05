@@ -1,14 +1,10 @@
-import { Core, CoreData } from "../Core";
-import { createTriangle } from "./createTriangle";
-import { draw } from "./draw";
-import { init } from "./init";
-
-export type WebGLCoreData = CoreData & {
+export type WebGLRendererData = {
   buffers?: {
     color: WebGLBuffer;
     index: WebGLBuffer;
     position: WebGLBuffer;
   };
+  canvas: HTMLCanvasElement;
   gl: WebGLRenderingContext;
   programInfo?: {
     attributesLocations: {
@@ -22,9 +18,3 @@ export type WebGLCoreData = CoreData & {
     };
   };
 };
-
-export const WebGLCore = {
-  createTriangle,
-  draw,
-  init,
-} satisfies Core<WebGLCoreData>;

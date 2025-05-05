@@ -7,7 +7,7 @@ import { Viewer } from "./viewer/Viewer";
 const [id, callback] = getScriptData();
 const viewerElement = getViewerElement(id);
 
-const data = init(viewerElement);
+const data = await init(viewerElement);
 
 const viewer: Viewer = {
   data,
