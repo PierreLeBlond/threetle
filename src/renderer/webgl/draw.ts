@@ -3,7 +3,7 @@ import { mat4 } from "gl-matrix";
 import { WebGLRendererData } from "./WebGLRendererData";
 
 export const draw = (rendererData: WebGLRendererData) => {
-  const { canvas, count, gl, programInfo, vao } = rendererData;
+  const { canvas, geometries, gl, programInfo } = rendererData;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -13,11 +13,6 @@ export const draw = (rendererData: WebGLRendererData) => {
   const projectionMatrix = mat4.create();
   const viewMatrix = mat4.create();
 
-  if (!vao || !programInfo) {
-    throw new Error("VAO or programInfo not found");
-  }
-
-  gl.bindVertexArray(vao);
   gl.useProgram(programInfo.program);
 
   gl.uniformMatrix4fv(
@@ -28,11 +23,10 @@ export const draw = (rendererData: WebGLRendererData) => {
 
   gl.uniformMatrix4fv(programInfo.uniformsLocations.view, false, viewMatrix);
 
-  if (!count) {
-    throw new Error("Count not found");
-  }
-
-  gl.drawElements(gl.TRIANGLES, count, gl.UNSIGNED_SHORT, 0);
+  geometries.forEach((geometry) => {
+    gl.bindVertexArray(geometry.vao);
+    gl.drawElements(gl.TRIANGLES, geometry.count, gl.UNSIGNED_INT, 0);
+  });
 
   gl.useProgram(null);
 

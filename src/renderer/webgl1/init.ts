@@ -1,4 +1,6 @@
-export const init = () => {
+import { WebGLRendererData } from "./WebGLRendererData";
+
+export const init = (): WebGLRendererData => {
   const canvas = document.createElement("canvas");
 
   const gl = canvas.getContext("webgl", {
@@ -12,6 +14,7 @@ export const init = () => {
 
   return {
     canvas,
+    geometries: [],
     gl,
   };
 };

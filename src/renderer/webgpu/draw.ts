@@ -1,7 +1,7 @@
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const draw = (rendererData: WebGPURendererData) => {
-  const { buffers, count, device, renderPipeline, wgpu } = rendererData;
+  const { device, renders, wgpu } = rendererData;
 
   const clearColor = { a: 1.0, b: 0.0, g: 0.0, r: 0.0 };
 
@@ -11,14 +11,8 @@ export const draw = (rendererData: WebGPURendererData) => {
 
   let multisampleTexture = rendererData.multisampleTexture;
 
-  if (!multisampleTexture) {
-    multisampleTexture = device.createTexture({
-      format: canvasTexture.format,
-      sampleCount: 4,
-    size: [canvasTexture.width, canvasTexture.height],
-    usage: GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-  } else if (multisampleTexture.width !== canvasTexture.width || multisampleTexture.height !== canvasTexture.height) {
+    
+  if (multisampleTexture.width !== canvasTexture.width || multisampleTexture.height !== canvasTexture.height) {
     multisampleTexture = device.createTexture({
       format: canvasTexture.format,
       sampleCount: 4,
@@ -43,23 +37,13 @@ export const draw = (rendererData: WebGPURendererData) => {
 
   const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
-  if (!renderPipeline) {
-    throw new Error("Render pipeline not found");
+  for (const render of renders) {
+    passEncoder.setPipeline(render.pipeline);
+    passEncoder.setVertexBuffer(0, render.buffers.vertex);
+    passEncoder.setIndexBuffer(render.buffers.index, "uint32");
+    passEncoder.drawIndexed(render.count);
   }
 
-  passEncoder.setPipeline(renderPipeline);
-
-  if (!buffers) {
-    throw new Error("Buffers not found");
-  }
-
-  if (!count) {
-    throw new Error("Count not found");
-  }
-
-  passEncoder.setVertexBuffer(0, buffers.vertex);
-  passEncoder.setIndexBuffer(buffers.index, "uint32");
-  passEncoder.drawIndexed(count);
   passEncoder.end();
 
   device.queue.submit([commandEncoder.finish()]);

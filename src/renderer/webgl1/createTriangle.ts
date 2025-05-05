@@ -5,19 +5,19 @@ import { WebGLRendererData } from "./WebGLRendererData";
 export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   const { gl } = data;
 
-  const vertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  const positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  const vertices = [-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0];
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+  const positions = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0]);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
-  const colors = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  const colors = new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
+  gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -80,7 +80,7 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
 
   const positionAttributeLocation = gl.getAttribLocation(program, "position");
   gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.vertexAttribPointer(
     positionAttributeLocation,
     3,
@@ -116,14 +116,18 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
     throw new Error("Failed to get view location");
   }
 
-  return {
-    ...data,
+  const geometry = {
     buffers: {
       color: colorBuffer,
       index: indexBuffer,
-      position: vertexBuffer,
+      position: positionBuffer,
     },
     count: indices.length,
+  }
+
+  return {
+    ...data,
+    geometries: [...data.geometries, geometry],
     programInfo: {
       attributesLocations: {
         color: colorAttributeLocation,

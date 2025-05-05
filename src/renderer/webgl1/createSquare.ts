@@ -64,15 +64,9 @@ export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
 
   const positionAttributeLocation = gl.getAttribLocation(program, "position");
   gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
   const colorAttributeLocation = gl.getAttribLocation(program, "color");
   gl.enableVertexAttribArray(colorAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(colorAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-
-  //gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
   const projectionLocation = gl.getUniformLocation(program, "projection");
 
@@ -86,14 +80,18 @@ export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
     throw new Error("Failed to get view location");
   }
 
-  return {
-    ...data,
+  const geometry = {
     buffers: {
       color: colorBuffer,
       index: indexBuffer,
       position: vertexBuffer,
     },
     count: indices.length,
+  }
+
+  return {
+    ...data,
+    geometries: [...data.geometries, geometry],
     programInfo: {
       attributesLocations: {
         color: colorAttributeLocation,

@@ -1,12 +1,15 @@
 export type WebGPURendererData = {
-  buffers?: {
-    index: GPUBuffer;
-    vertex: GPUBuffer;
-  };
   canvas: HTMLCanvasElement;
-  count?: number;
   device: GPUDevice;
-  multisampleTexture?: GPUTexture;
-  renderPipeline?: GPURenderPipeline;
+  multisampleTexture: GPUTexture;
+  renders: {
+    buffers: {
+      index: GPUBuffer;
+      vertex: GPUBuffer;
+    };
+    count: number;
+    pipeline: GPURenderPipeline;
+  }[];
+  shaderModule: GPUShaderModule;
   wgpu: GPUCanvasContext;
 };

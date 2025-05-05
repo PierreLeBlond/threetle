@@ -1,4 +1,6 @@
-import { Renderer } from "../Renderer";
+import { Renderer } from "@/renderer/Renderer";
+import { addGeometry } from "@/renderer/webgl/geometry/addGeometry";
+
 import { createSquare } from "./createSquare";
 import { createTriangle } from "./createTriangle";
 import { draw } from "./draw";
@@ -8,6 +10,9 @@ export const getWebGLRenderer = (): Renderer => {
   let data = init();
 
   return {
+    addGeometry: (vertexData) => {
+      data = addGeometry(data, vertexData);
+    },
     createSquare: () => {
       data = createSquare(data);
     },

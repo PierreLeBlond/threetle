@@ -1,4 +1,3 @@
-import shaders from "./shaders/triangle.wgsl?raw";
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const createTriangle = (
@@ -7,12 +6,12 @@ export const createTriangle = (
   const { device } = data;
 
   const vertices = new Float32Array([
-    -0.5, -0.5, 0.0, 1.0,
-    1.0, 0.0, 0.0, 1.0,
-    0.5, -0.5, 0.0, 1.0,
-    0.0, 1.0, 0.0, 1.0,
-    0.0, 0.5, 0.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
+    -0.5, -0.5, 0.0,
+    1.0, 0.0, 0.0,
+    0.5, -0.5, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.5, 0.0,
+    0.0, 0.0, 1.0,
   ]);
   const vertexBuffer = device.createBuffer({
     size: vertices.byteLength,
@@ -30,16 +29,16 @@ export const createTriangle = (
 
   const vertexBuffers = [
     {
-      arrayStride: 32,
+      arrayStride: 24,
       attributes: [
         {
-          format: "float32x4",
+          format: "float32x3",
           offset: 0,
           shaderLocation: 0, // position
         },
         {
-          format: "float32x4",
-          offset: 16,
+          format: "float32x3",
+          offset: 12,
           shaderLocation: 1, // color
         },
       ],
@@ -47,14 +46,10 @@ export const createTriangle = (
     },
   ] satisfies GPUVertexBufferLayout[];
 
-  const shaderModule = device.createShaderModule({
-    code: shaders,
-  }) satisfies GPUShaderModule;
-
   const pipelineDescriptor = {
     fragment: {
       entryPoint: "fragment_main",
-      module: shaderModule,
+      module: data.shaderModule,
       targets: [
         {
           format: navigator.gpu.getPreferredCanvasFormat(),
@@ -71,20 +66,23 @@ export const createTriangle = (
     vertex: {
       buffers: vertexBuffers,
       entryPoint: "vertex_main",
-      module: shaderModule,
+      module: data.shaderModule,
     },
   } satisfies GPURenderPipelineDescriptor;
 
   const renderPipeline = device.createRenderPipeline(pipelineDescriptor);
 
-
-  return {
-    ...data,
+  const render = {
     buffers: {
       index: indexBuffer,
       vertex: vertexBuffer,
     },
     count: indices.length,
-    renderPipeline,
+    pipeline: renderPipeline,
+  };
+
+  return {
+    ...data,
+    renders: [...data.renders, render]
   };
 };

@@ -1,13 +1,16 @@
 export type WebGLRendererData = {
-  buffers?: {
-    color: WebGLBuffer;
-    index: WebGLBuffer;
-    position: WebGLBuffer;
-  };
   canvas: HTMLCanvasElement;
-  count?: number;
+  geometries: {
+    buffers: {
+      color: WebGLBuffer;
+      index: WebGLBuffer;
+      position: WebGLBuffer;
+    };
+    count: number;
+    vao: WebGLVertexArrayObject;
+  }[];
   gl: WebGL2RenderingContext;
-  programInfo?: {
+  programInfo: {
     attributesLocations: {
       color: number;
       position: number;
@@ -18,5 +21,4 @@ export type WebGLRendererData = {
       view: WebGLUniformLocation;
     };
   };
-  vao?: WebGLVertexArrayObject;
 };

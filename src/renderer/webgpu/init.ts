@@ -1,3 +1,4 @@
+import shaders from "./shaders/triangle.wgsl?raw";
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const init = async (): Promise<WebGPURendererData> => {
@@ -30,10 +31,25 @@ export const init = async (): Promise<WebGPURendererData> => {
     format: navigator.gpu.getPreferredCanvasFormat(),
   });
 
+  const canvasTexture = wgpu.getCurrentTexture();
+
+  const multisampleTexture = device.createTexture({
+    format: canvasTexture.format,
+    sampleCount: 4,
+    size: [canvasTexture.width, canvasTexture.height],
+    usage: GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+
+  const shaderModule = device.createShaderModule({
+    code: shaders,
+  }) satisfies GPUShaderModule;
 
   return {
     canvas,
     device,
+    multisampleTexture,
+    renders: [],
+    shaderModule,
     wgpu,
   };
 };

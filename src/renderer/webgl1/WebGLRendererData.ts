@@ -1,11 +1,13 @@
 export type WebGLRendererData = {
-  buffers?: {
-    color: WebGLBuffer;
-    index: WebGLBuffer;
-    position: WebGLBuffer;
-  };
   canvas: HTMLCanvasElement;
-  count?: number;
+  geometries: {
+    buffers: {
+      color: WebGLBuffer;
+      index: WebGLBuffer;
+      position: WebGLBuffer;
+    };
+    count: number;
+  }[];
   gl: WebGLRenderingContext;
   programInfo?: {
     attributesLocations: {
