@@ -3,7 +3,7 @@ import { mat4 } from "gl-matrix";
 import { WebGLRendererData } from "./WebGLRendererData";
 
 export const draw = (rendererData: WebGLRendererData) => {
-  const { canvas, gl, programInfo, vao } = rendererData;
+  const { buffers, canvas, gl, programInfo } = rendererData;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -13,11 +13,12 @@ export const draw = (rendererData: WebGLRendererData) => {
   const projectionMatrix = mat4.create();
   const viewMatrix = mat4.create();
 
-  if (!vao || !programInfo) {
+  if (!buffers || !programInfo) {
     return;
   }
 
-  gl.bindVertexArray(vao);
+  //gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index);
+
   gl.useProgram(programInfo.program);
 
   gl.uniformMatrix4fv(
@@ -32,5 +33,5 @@ export const draw = (rendererData: WebGLRendererData) => {
 
   gl.useProgram(null);
 
-  gl.bindVertexArray(null);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
 };

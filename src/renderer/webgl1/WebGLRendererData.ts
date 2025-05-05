@@ -5,7 +5,7 @@ export type WebGLRendererData = {
     position: WebGLBuffer;
   };
   canvas: HTMLCanvasElement;
-  gl: WebGL2RenderingContext;
+  gl: WebGLRenderingContext;
   programInfo?: {
     attributesLocations: {
       color: number;
@@ -17,5 +17,4 @@ export type WebGLRendererData = {
       view: WebGLUniformLocation;
     };
   };
-  vao?: WebGLVertexArrayObject;
 };

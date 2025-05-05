@@ -79,33 +79,31 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   gl.deleteShader(fragmentShader);
 
   const positionAttributeLocation = gl.getAttribLocation(program, "position");
-  const colorAttributeLocation = gl.getAttribLocation(program, "color");
-
-  // Vertex Array Object, will store calls to gl.enableVertexAttribArray and gl.vertexAttribPointer
-  const vao = gl.createVertexArray();
-  gl.bindVertexArray(vao);
-
-  // Attributes locations
   gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.enableVertexAttribArray(colorAttributeLocation);
-
-  // Position
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(
+    positionAttributeLocation,
+    3,
+    gl.FLOAT,
+    false,
+    0, // stride will be automatically calculated if it's 0
+    0,
+  );
 
-  // Color
+  const colorAttributeLocation = gl.getAttribLocation(program, "color");
+  gl.enableVertexAttribArray(colorAttributeLocation);
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(colorAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(
+    colorAttributeLocation,
+    3,
+    gl.FLOAT,
+    false,
+    0, // stride will be automatically calculated if it's 0
+    0,
+  );
 
-  // Index
-  //gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-  // Unbind
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
-  gl.bindVertexArray(null);
 
-  // Uniforms
   const projectionLocation = gl.getUniformLocation(program, "projection");
 
   if (!projectionLocation) {
@@ -117,7 +115,6 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   if (!viewLocation) {
     throw new Error("Failed to get view location");
   }
-
 
   return {
     ...data,
@@ -137,6 +134,5 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
         view: viewLocation,
       },
     },
-    vao,
   };
 };
