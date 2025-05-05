@@ -1,7 +1,7 @@
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const draw = (rendererData: WebGPURendererData) => {
-  const { buffers, device, renderPipeline, wgpu } = rendererData;
+  const { buffers, count, device, renderPipeline, wgpu } = rendererData;
 
   const clearColor = { a: 1.0, b: 0.0, g: 0.0, r: 0.0 };
 
@@ -53,8 +53,13 @@ export const draw = (rendererData: WebGPURendererData) => {
     throw new Error("Buffers not found");
   }
 
+  if (!count) {
+    throw new Error("Count not found");
+  }
+
   passEncoder.setVertexBuffer(0, buffers.vertex);
-  passEncoder.draw(3);
+  passEncoder.setIndexBuffer(buffers.index, "uint32");
+  passEncoder.drawIndexed(count);
   passEncoder.end();
 
   device.queue.submit([commandEncoder.finish()]);

@@ -10,6 +10,7 @@ export const getRenderer = async (): Promise<Renderer> => {
     return renderer;
   } catch {
     try {
+      throw new Error("WebGL renderer not supported");
       const renderer = getWebGLRenderer();
       console.info("Using WebGL renderer");
       return renderer;

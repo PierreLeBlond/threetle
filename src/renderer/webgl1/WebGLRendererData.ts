@@ -5,6 +5,7 @@ export type WebGLRendererData = {
     position: WebGLBuffer;
   };
   canvas: HTMLCanvasElement;
+  count?: number;
   gl: WebGLRenderingContext;
   programInfo?: {
     attributesLocations: {

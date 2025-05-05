@@ -10,7 +10,7 @@ export const init = async (element: HTMLElement) => {
   canvas.width = element.clientWidth;
   canvas.height = element.clientHeight;
 
-  renderer.createTriangle();
+  renderer.createSquare();
 
   const loop = () => {
     renderer.draw();

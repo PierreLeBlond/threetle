@@ -98,11 +98,9 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   gl.vertexAttribPointer(colorAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
   // Index
-  //gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
   // Unbind
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-  gl.bindBuffer(gl.ARRAY_BUFFER, null);
   gl.bindVertexArray(null);
 
   // Uniforms
@@ -126,6 +124,7 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
       index: indexBuffer,
       position: vertexBuffer,
     },
+    count: indices.length,
     programInfo: {
       attributesLocations: {
         color: colorAttributeLocation,

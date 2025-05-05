@@ -2,35 +2,25 @@ import fragmentShaderSource from "./shaders/triangle.frag?raw";
 import vertexShaderSource from "./shaders/triangle.vert?raw";
 import { WebGLRendererData } from "./WebGLRendererData";
 
-export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
+export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
   const { gl } = data;
 
   const vertexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-
-  const vertices = [-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0];
+  const vertices = [-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, 0.5, 0.0];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-
-  const colors = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
+  const colors = [1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-  const indices = [0, 1, 2];
-  gl.bufferData(
-    gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array(indices),
-    gl.STATIC_DRAW,
-  );
-
+  const indices = [0, 1, 2, 0, 2, 3];
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
   const vertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -43,9 +33,7 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   gl.compileShader(vertexShader);
 
   if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-    throw new Error(
-      `Error compiling vertex shader: ${gl.getShaderInfoLog(vertexShader) ?? "Unknown error"}`,
-    );
+    throw new Error(`Error compiling vertex shader: ${gl.getShaderInfoLog(vertexShader) ?? "Unknown error"}`);
   }
 
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -58,9 +46,7 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   gl.compileShader(fragmentShader);
 
   if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-    throw new Error(
-      `Error compiling fragment shader: ${gl.getShaderInfoLog(fragmentShader) ?? "Unknown error"}`,
-    );
+    throw new Error(`Error compiling fragment shader: ${gl.getShaderInfoLog(fragmentShader) ?? "Unknown error"}`);
   }
 
   const program = gl.createProgram();
@@ -70,39 +56,30 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
   gl.linkProgram(program);
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    throw new Error(
-      `Error linking program: ${gl.getProgramInfoLog(program) ?? "Unknown error"}`,
-    );
+    throw new Error(`Error linking program: ${gl.getProgramInfoLog(program) ?? "Unknown error"}`);
   }
 
   gl.deleteShader(vertexShader);
   gl.deleteShader(fragmentShader);
 
   const positionAttributeLocation = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.vertexAttribPointer(
-    positionAttributeLocation,
-    3,
-    gl.FLOAT,
-    false,
-    0, // stride will be automatically calculated if it's 0
-    0,
-  );
-
   const colorAttributeLocation = gl.getAttribLocation(program, "color");
-  gl.enableVertexAttribArray(colorAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(
-    colorAttributeLocation,
-    3,
-    gl.FLOAT,
-    false,
-    0, // stride will be automatically calculated if it's 0
-    0,
-  );
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  const vao = gl.createVertexArray();
+  gl.bindVertexArray(vao);
+
+  gl.enableVertexAttribArray(positionAttributeLocation);
+  gl.enableVertexAttribArray(colorAttributeLocation);
+  
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.vertexAttribPointer(colorAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+  gl.bindVertexArray(null);
 
   const projectionLocation = gl.getUniformLocation(program, "projection");
 
@@ -135,5 +112,7 @@ export const createTriangle = (data: WebGLRendererData): WebGLRendererData => {
         view: viewLocation,
       },
     },
+    vao,
   };
 };
+
