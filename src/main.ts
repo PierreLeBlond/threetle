@@ -1,19 +1,11 @@
 import "./style.css";
 import { getScriptData } from "./getScriptData";
 import { getViewerElement } from "./getViewerElement";
-import { init } from "./viewer/init";
-import { Viewer } from "./viewer/Viewer";
+import { getViewer } from "./viewer/getViewer";
 
 const [id, callback] = getScriptData();
 const viewerElement = getViewerElement(id);
 
-const data = await init(viewerElement);
-
-const viewer: Viewer = {
-  createSquare: () => {
-    data.renderer.createSquare();
-  },
-  data,
-};
+const viewer = await getViewer(viewerElement);
 
 callback(viewer);

@@ -1,5 +1,5 @@
-import { getRenderer } from "./getRenderer";
-import { resize } from "./resize";
+import { getRenderer } from "../getRenderer";
+import { resize } from "../resize";
 export const init = async (element: HTMLElement) => {
   const canvas = document.createElement("canvas");
   element.appendChild(canvas);
