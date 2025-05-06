@@ -19,7 +19,7 @@ export const getWebGPURenderer = async (): Promise<Renderer> => {
       data = createTriangle(data);
     },
     draw: () => {
-      draw(data);
+      data = draw(data);
     },
     getCanvas: () => {
       return data.canvas;

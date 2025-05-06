@@ -28,5 +28,5 @@
       ]
     }
   },
-  "include": ["src"]
+  "include": ["src", "tests", "tests/vitest.d.ts"]
 }

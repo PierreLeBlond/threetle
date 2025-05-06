@@ -1,7 +1,7 @@
 import { WebGPURendererData } from "./WebGPURendererData";
 
-export const draw = (rendererData: WebGPURendererData) => {
-  const { device, renders, wgpu } = rendererData;
+export const draw = (data: WebGPURendererData) => {
+  const { device, renders, wgpu } = data;
 
   const clearColor = { a: 1.0, b: 0.0, g: 0.0, r: 0.0 };
 
@@ -9,10 +9,11 @@ export const draw = (rendererData: WebGPURendererData) => {
   // Will need updates when resizing canvas
   const canvasTexture = wgpu.getCurrentTexture();
 
-  let multisampleTexture = rendererData.multisampleTexture;
-
+  let multisampleTexture = data.multisampleTexture;
     
   if (multisampleTexture.width !== canvasTexture.width || multisampleTexture.height !== canvasTexture.height) {
+    console.log("multisampleTexture", multisampleTexture.width, canvasTexture.width);
+    multisampleTexture.destroy();
     multisampleTexture = device.createTexture({
       format: canvasTexture.format,
       sampleCount: 4,
@@ -47,4 +48,9 @@ export const draw = (rendererData: WebGPURendererData) => {
   passEncoder.end();
 
   device.queue.submit([commandEncoder.finish()]);
+
+  return {
+    ...data,
+    multisampleTexture,
+  };
 };

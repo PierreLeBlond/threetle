@@ -10,6 +10,9 @@ const viewerElement = getViewerElement(id);
 const data = await init(viewerElement);
 
 const viewer: Viewer = {
+  createSquare: () => {
+    data.renderer.createSquare();
+  },
   data,
 };
 

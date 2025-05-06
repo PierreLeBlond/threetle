@@ -9,7 +9,7 @@ export type WebGLRendererData = {
     count: number;
   }[];
   gl: WebGLRenderingContext;
-  programInfo?: {
+  shaderProgram: {
     attributesLocations: {
       color: number;
       position: number;

@@ -10,7 +10,7 @@ export type WebGLRendererData = {
     vao: WebGLVertexArrayObject;
   }[];
   gl: WebGL2RenderingContext;
-  programInfo: {
+  shaderProgram: {
     attributesLocations: {
       color: number;
       position: number;

@@ -1,7 +1,7 @@
 import { WebGLRendererData } from "./WebGLRendererData";
 
 export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
-  const { gl, programInfo } = data;
+  const { gl, shaderProgram } = data;
 
   const vertexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -24,14 +24,14 @@ export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
   const vao = gl.createVertexArray();
   gl.bindVertexArray(vao);
 
-  gl.enableVertexAttribArray(programInfo.attributesLocations.position);
-  gl.enableVertexAttribArray(programInfo.attributesLocations.color);
+  gl.enableVertexAttribArray(shaderProgram.attributesLocations.position);
+  gl.enableVertexAttribArray(shaderProgram.attributesLocations.color);
   
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.vertexAttribPointer(programInfo.attributesLocations.position, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(shaderProgram.attributesLocations.position, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(programInfo.attributesLocations.color, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(shaderProgram.attributesLocations.color, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 

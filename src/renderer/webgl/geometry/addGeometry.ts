@@ -7,7 +7,7 @@ export const addGeometry = (data: WebGLRendererData, vertexData: {
   indices: Uint32Array,
   positions: Float32Array,
 }) => {
-  const { gl, programInfo } = data;
+  const { gl, shaderProgram } = data;
 
   const positionBuffer = addBuffer(gl, vertexData.positions);
   const colorBuffer = addBuffer(gl, vertexData.colors);
@@ -18,16 +18,16 @@ export const addGeometry = (data: WebGLRendererData, vertexData: {
   gl.bindVertexArray(vao);
 
   // Attributes locations
-  gl.enableVertexAttribArray(programInfo.attributesLocations.position);
-  gl.enableVertexAttribArray(programInfo.attributesLocations.color);
+  gl.enableVertexAttribArray(shaderProgram.attributesLocations.position);
+  gl.enableVertexAttribArray(shaderProgram.attributesLocations.color);
 
   // Position
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  gl.vertexAttribPointer(programInfo.attributesLocations.position, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(shaderProgram.attributesLocations.position, 3, gl.FLOAT, false, 0, 0);
 
   // Color
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(programInfo.attributesLocations.color, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(shaderProgram.attributesLocations.color, 3, gl.FLOAT, false, 0, 0);
 
   // Index
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);

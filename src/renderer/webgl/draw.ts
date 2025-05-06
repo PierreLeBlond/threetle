@@ -3,7 +3,7 @@ import { mat4 } from "gl-matrix";
 import { WebGLRendererData } from "./WebGLRendererData";
 
 export const draw = (rendererData: WebGLRendererData) => {
-  const { canvas, geometries, gl, programInfo } = rendererData;
+  const { canvas, geometries, gl, shaderProgram } = rendererData;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -13,15 +13,15 @@ export const draw = (rendererData: WebGLRendererData) => {
   const projectionMatrix = mat4.create();
   const viewMatrix = mat4.create();
 
-  gl.useProgram(programInfo.program);
+  gl.useProgram(shaderProgram.program);
 
   gl.uniformMatrix4fv(
-    programInfo.uniformsLocations.projection,
+    shaderProgram.uniformsLocations.projection,
     false,
     projectionMatrix,
   );
 
-  gl.uniformMatrix4fv(programInfo.uniformsLocations.view, false, viewMatrix);
+  gl.uniformMatrix4fv(shaderProgram.uniformsLocations.view, false, viewMatrix);
 
   geometries.forEach((geometry) => {
     gl.bindVertexArray(geometry.vao);
