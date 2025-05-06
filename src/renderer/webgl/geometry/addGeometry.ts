@@ -1,4 +1,4 @@
-import { addBuffer } from "@/renderer/webgl1/utils/addBuffer";
+import { addBuffer } from "@/renderer/webgl/utils/addBuffer";
 import { addIndexBuffer } from "@/renderer/webgl/utils/addIndexBuffer";
 import { WebGLRendererData } from "@/renderer/webgl/WebGLRendererData";
 

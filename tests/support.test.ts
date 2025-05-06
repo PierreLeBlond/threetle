@@ -5,7 +5,6 @@ describe("support", () => {
   const consoleSpy = vi.spyOn(console, 'log');
 
   test.each([
-    ["WebGL 1.0", ["--disable-webgl2", "--disable-webgpu"]],
     ["WebGL", ["--disable-webgpu"]],
     ["WebGPU", ["--enable-unsafe-webgpu"]],
   ])("should support %s", async (name, args) => {

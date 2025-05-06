@@ -1,4 +1,4 @@
-import { addShaderProgram } from "@/renderer/webgl1/utils/addShaderProgram";
+import { addShaderProgram } from "@/renderer/webgl/utils/addShaderProgram";
 
 import { WebGLRendererData } from "./WebGLRendererData";
 
