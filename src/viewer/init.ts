@@ -1,14 +1,10 @@
 import { getRenderer } from "./getRenderer";
-
+import { resize } from "./resize";
 export const init = async (element: HTMLElement) => {
-  const renderer = await getRenderer();
-
-  const canvas = renderer.getCanvas();
-
+  const canvas = document.createElement("canvas");
   element.appendChild(canvas);
 
-  canvas.width = element.clientWidth;
-  canvas.height = element.clientHeight;
+  const renderer = await getRenderer(canvas);
 
   const loop = () => {
     renderer.draw();
@@ -17,6 +13,11 @@ export const init = async (element: HTMLElement) => {
   };
 
   requestAnimationFrame(loop);
+
+  element.addEventListener("resize", () => {
+    resize(canvas, renderer, element.clientWidth, element.clientHeight);
+  });
+  resize(canvas, renderer, element.clientWidth, element.clientHeight);
 
   return {
     element,

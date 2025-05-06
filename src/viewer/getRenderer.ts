@@ -3,18 +3,18 @@ import { getWebGL1Renderer } from "@/renderer/webgl1/getWebGL1Renderer";
 import { getWebGLRenderer } from "@/renderer/webgl/getWebGLRenderer";
 import { getWebGPURenderer } from "@/renderer/webgpu/getWebGPURenderer";
 
-export const getRenderer = async (): Promise<Renderer> => {
+export const getRenderer = async (canvas: HTMLCanvasElement): Promise<Renderer> => {
   try {
-    const renderer = await getWebGPURenderer();
+    const renderer = await getWebGPURenderer(canvas);
     console.info("Using WebGPU renderer");
     return renderer;
   } catch {
     try {
-      const renderer = getWebGLRenderer();
+      const renderer = getWebGLRenderer(canvas);
       console.info("Using WebGL renderer");
       return renderer;
     } catch {
-      const renderer = getWebGL1Renderer();
+      const renderer = getWebGL1Renderer(canvas);
       console.info("Using WebGL 1.0 renderer");
       return renderer;
     }

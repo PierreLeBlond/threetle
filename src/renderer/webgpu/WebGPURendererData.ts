@@ -1,5 +1,4 @@
 export type WebGPURendererData = {
-  canvas: HTMLCanvasElement;
   device: GPUDevice;
   multisampleTexture: GPUTexture;
   renders: {

@@ -1,26 +1,13 @@
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const draw = (data: WebGPURendererData) => {
-  const { device, renders, wgpu } = data;
+  const { device, multisampleTexture, renders, wgpu } = data;
 
   const clearColor = { a: 1.0, b: 0.0, g: 0.0, r: 0.0 };
 
   // From https://webgpufundamentals.org/webgpu/lessons/webgpu-multisampling.html
   // Will need updates when resizing canvas
   const canvasTexture = wgpu.getCurrentTexture();
-
-  let multisampleTexture = data.multisampleTexture;
-    
-  if (multisampleTexture.width !== canvasTexture.width || multisampleTexture.height !== canvasTexture.height) {
-    console.log("multisampleTexture", multisampleTexture.width, canvasTexture.width);
-    multisampleTexture.destroy();
-    multisampleTexture = device.createTexture({
-      format: canvasTexture.format,
-      sampleCount: 4,
-      size: [canvasTexture.width, canvasTexture.height],
-      usage: GPUTextureUsage.RENDER_ATTACHMENT,
-    });
-  }
 
   const renderPassDescriptor = {
     colorAttachments: [
@@ -49,8 +36,5 @@ export const draw = (data: WebGPURendererData) => {
 
   device.queue.submit([commandEncoder.finish()]);
 
-  return {
-    ...data,
-    multisampleTexture,
-  };
+  return data;
 };

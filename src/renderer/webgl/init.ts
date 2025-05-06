@@ -2,8 +2,7 @@ import { addShaderProgram } from "@/renderer/webgl1/utils/addShaderProgram";
 
 import { WebGLRendererData } from "./WebGLRendererData";
 
-export const init = (): WebGLRendererData => {
-  const canvas = document.createElement("canvas");
+export const init = (canvas: HTMLCanvasElement): WebGLRendererData => {
 
   const gl = canvas.getContext("webgl2", {
     antialias: true,
@@ -16,7 +15,6 @@ export const init = (): WebGLRendererData => {
   const shaderProgram = addShaderProgram(gl);
 
   return {
-    canvas,
     geometries: [],
     gl,
     shaderProgram,

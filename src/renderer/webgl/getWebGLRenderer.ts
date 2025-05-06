@@ -5,9 +5,10 @@ import { createSquare } from "./createSquare";
 import { createTriangle } from "./createTriangle";
 import { draw } from "./draw";
 import { init } from "./init";
+import { resize } from "./resize";
 
-export const getWebGLRenderer = (): Renderer => {
-  let data = init();
+export const getWebGLRenderer = (canvas: HTMLCanvasElement): Renderer => {
+  let data = init(canvas);
 
   return {
     addGeometry: (vertexData) => {
@@ -22,8 +23,8 @@ export const getWebGLRenderer = (): Renderer => {
     draw: () => {
       draw(data);
     },
-    getCanvas: () => {
-      return data.canvas;
-    },
+    resize: (width: number, height: number) => {
+      data = resize(data, width, height);
+    }
   };
 };

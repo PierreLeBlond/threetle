@@ -1,5 +1,4 @@
 export type WebGLRendererData = {
-  canvas: HTMLCanvasElement;
   geometries: {
     buffers: {
       color: WebGLBuffer;

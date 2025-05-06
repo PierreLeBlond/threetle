@@ -1,9 +1,7 @@
 import { addShaderProgram } from "./utils/addShaderProgram";
 import { WebGLRendererData } from "./WebGLRendererData";
 
-export const init = (): WebGLRendererData => {
-  const canvas = document.createElement("canvas");
-
+export const init = (canvas: HTMLCanvasElement): WebGLRendererData => {
   const gl = canvas.getContext("webgl", {
     antialias: true,
   });
@@ -19,7 +17,6 @@ export const init = (): WebGLRendererData => {
   gl.enableVertexAttribArray(shaderProgram.attributesLocations.color);
 
   return {
-    canvas,
     geometries: [],
     gl,
     shaderProgram,

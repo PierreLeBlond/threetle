@@ -1,9 +1,8 @@
-import shaders from "./shaders/triangle.wgsl?raw";
+import shaders from "./shaders/shader.wgsl?raw";
 import { WebGPURendererData } from "./WebGPURendererData";
 
-export const init = async (): Promise<WebGPURendererData> => {
+export const init = async (canvas: HTMLCanvasElement): Promise<WebGPURendererData> => {
   const gpu = navigator.gpu as GPU | null;
-
   if (!gpu) {
     throw Error("WebGPU not supported.");
   }
@@ -15,12 +14,7 @@ export const init = async (): Promise<WebGPURendererData> => {
 
   const device = await adapter.requestDevice();
 
-  const canvas = document.createElement("canvas");
-
-  // GL 1.0 context, we'll support 2.0 soon enough
   const wgpu = canvas.getContext("webgpu");
-
-  // TODO: Provide a fallback, or send an error event
   if (!wgpu) {
     throw new Error("Failed to create WebGPU context");
   }
@@ -45,7 +39,6 @@ export const init = async (): Promise<WebGPURendererData> => {
   }) satisfies GPUShaderModule;
 
   return {
-    canvas,
     device,
     multisampleTexture,
     renders: [],

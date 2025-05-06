@@ -4,9 +4,9 @@ import { createTriangle } from "./createTriangle";
 import { draw } from "./draw";
 import { addGeometry } from "./geometry/addGeometry";
 import { init } from "./init";
-
-export const getWebGPURenderer = async (): Promise<Renderer> => {
-  let data = await init();
+import { resize } from "./resize";
+export const getWebGPURenderer = async (canvas: HTMLCanvasElement): Promise<Renderer> => {
+  let data = await init(canvas);
 
   return {
     addGeometry: (geometry) => {
@@ -21,8 +21,8 @@ export const getWebGPURenderer = async (): Promise<Renderer> => {
     draw: () => {
       data = draw(data);
     },
-    getCanvas: () => {
-      return data.canvas;
-    },
+    resize: (width: number, height: number) => {
+      data = resize(data, width, height);
+    }
   };
 };
