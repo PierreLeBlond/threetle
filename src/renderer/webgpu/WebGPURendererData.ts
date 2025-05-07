@@ -1,14 +1,15 @@
 export type WebGPURendererData = {
+  cameraBindGroup: GPUBindGroup;
+  cameraUniformBuffer: GPUBuffer;
   device: GPUDevice;
-  multisampleTexture: GPUTexture;
-  renders: {
+  geometries: Map<string, {
     buffers: {
       index: GPUBuffer;
       vertex: GPUBuffer;
     };
     count: number;
-    pipeline: GPURenderPipeline;
-  }[];
-  shaderModule: GPUShaderModule;
+  }>;
+  multisampleTexture: GPUTexture;
+  renderPipeline: GPURenderPipeline;
   wgpu: GPUCanvasContext;
 };

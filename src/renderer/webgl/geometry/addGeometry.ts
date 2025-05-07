@@ -1,6 +1,7 @@
-import { addBuffer } from "@/renderer/webgl/utils/addBuffer";
-import { addIndexBuffer } from "@/renderer/webgl/utils/addIndexBuffer";
 import { WebGLRendererData } from "@/renderer/webgl/WebGLRendererData";
+
+import { addBuffer } from "./addBuffer";
+import { addIndexBuffer } from "./addIndexBuffer";
 
 export const addGeometry = (data: WebGLRendererData, vertexData: {
   colors: Float32Array,
@@ -35,16 +36,13 @@ export const addGeometry = (data: WebGLRendererData, vertexData: {
   // Unbind
   gl.bindVertexArray(null);
 
-  return {  
-    ...data,
-    geometries: [...data.geometries, {
-      buffers: {
-        color: colorBuffer,
-        index: indexBuffer,
-        position: positionBuffer,
-      },
-      count: vertexData.indices.length,
-      vao,
-    }],
-  }
-}
+  return {
+    buffers: {
+      color: colorBuffer,
+      index: indexBuffer,
+      position: positionBuffer,
+    },
+    count: vertexData.indices.length,
+    vao,
+  };
+};

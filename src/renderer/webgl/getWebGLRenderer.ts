@@ -1,8 +1,8 @@
 import { Renderer } from "@/renderer/Renderer";
 import { addGeometry } from "@/renderer/webgl/geometry/addGeometry";
+import { mat4 } from "gl-matrix";
 
 import { createSquare } from "./createSquare";
-import { createTriangle } from "./createTriangle";
 import { draw } from "./draw";
 import { init } from "./init";
 import { resize } from "./resize";
@@ -12,16 +12,23 @@ export const getWebGLRenderer = (canvas: HTMLCanvasElement): Renderer => {
 
   return {
     addGeometry: (vertexData) => {
-      data = addGeometry(data, vertexData);
+      const geometry = addGeometry(data, vertexData);
+
+      const id = crypto.randomUUID();
+      data.geometries.set(id, geometry);
+
+      return id;
     },
     createSquare: () => {
-      data = createSquare(data);
+      const geometry = createSquare(data);
+
+      const id = crypto.randomUUID();
+      data.geometries.set(id, geometry);
+
+      return id;
     },
-    createTriangle: () => {
-      data = createTriangle(data);
-    },
-    draw: () => {
-      draw(data);
+    draw: (view: mat4, projection: mat4, geometryIds: string[]) => {
+      draw(data, view, projection, geometryIds);
     },
     resize: (width: number, height: number) => {
       data = resize(data, width, height);

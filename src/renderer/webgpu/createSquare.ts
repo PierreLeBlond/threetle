@@ -2,7 +2,7 @@ import { WebGPURendererData } from "./WebGPURendererData";
 
 export const createSquare = (
   data: WebGPURendererData,
-): WebGPURendererData => {
+) => {
   const { device } = data;
 
   const vertices = new Float32Array([
@@ -28,62 +28,13 @@ export const createSquare = (
   });
   device.queue.writeBuffer(indexBuffer, 0, indices, 0, indices.length);
 
-  const vertexBuffers = [
-    {
-      arrayStride: 24,
-      attributes: [
-        {
-          format: "float32x3",
-          offset: 0,
-          shaderLocation: 0, // position
-        },
-        {
-          format: "float32x3",
-          offset: 12,
-          shaderLocation: 1, // color
-        },
-      ],
-      stepMode: "vertex",
-    },
-  ] satisfies GPUVertexBufferLayout[];
-
-  const pipelineDescriptor = {
-    fragment: {
-      entryPoint: "fragment_main",
-      module: data.shaderModule,
-      targets: [
-        {
-          format: navigator.gpu.getPreferredCanvasFormat(),
-        },
-      ],
-    },
-    layout: "auto",
-    multisample: {
-      count: 4,
-    },
-    primitive: {
-      topology: "triangle-list",
-    },
-    vertex: {
-      buffers: vertexBuffers,
-      entryPoint: "vertex_main",
-      module: data.shaderModule,
-    },
-  } satisfies GPURenderPipelineDescriptor;
-
-  const renderPipeline = device.createRenderPipeline(pipelineDescriptor);
-
   const render = {
     buffers: {
       index: indexBuffer,
       vertex: vertexBuffer,
     },
     count: indices.length,
-    pipeline: renderPipeline,
   };
 
-  return {
-    ...data,
-    renders: [...data.renders, render],
-  };
+  return render;
 };

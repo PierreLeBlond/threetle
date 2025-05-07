@@ -1,6 +1,7 @@
+import { mat4 } from "gl-matrix";
+
 import { Renderer } from "../Renderer";
 import { createSquare } from "./createSquare";
-import { createTriangle } from "./createTriangle";
 import { draw } from "./draw";
 import { addGeometry } from "./geometry/addGeometry";
 import { init } from "./init";
@@ -9,17 +10,24 @@ export const getWebGPURenderer = async (canvas: HTMLCanvasElement): Promise<Rend
   let data = await init(canvas);
 
   return {
-    addGeometry: (geometry) => {
-      data = addGeometry(data, geometry);
+    addGeometry: (vertexData) => {
+      const geometry = addGeometry(data, vertexData);
+
+      const id = crypto.randomUUID();
+      data.geometries.set(id, geometry);
+
+      return id;
     },
     createSquare: () => {
-      data = createSquare(data);
+      const geometry = createSquare(data);
+
+      const id = crypto.randomUUID();
+      data.geometries.set(id, geometry);
+
+      return id;
     },
-    createTriangle: () => {
-      data = createTriangle(data);
-    },
-    draw: () => {
-      data = draw(data);
+    draw: (view: mat4, projection: mat4, geometryIds: string[]) => {
+      draw(data, view, projection, geometryIds);
     },
     resize: (width: number, height: number) => {
       data = resize(data, width, height);

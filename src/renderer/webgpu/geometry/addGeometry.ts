@@ -24,63 +24,12 @@ export const addGeometry = (data: WebGPURendererData, vertexData: {
     usage: GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST,
   });
   device.queue.writeBuffer(indexBuffer, 0, vertexData.indices, 0, vertexData.indices.length);
-  
-  const vertexBuffers = [
-    {
-      arrayStride: 24,
-      attributes: [
-        {
-          format: "float32x3", 
-          offset: 0,
-          shaderLocation: 0,
-        },
-        {
-          format: "float32x3",
-          offset: 12,
-          shaderLocation: 1,
-        },
-      ],
-      stepMode: "vertex",
-    },
-  ] satisfies GPUVertexBufferLayout[];
 
-  const pipelineDescriptor = {
-    fragment: {
-      entryPoint: "fragment_main",
-      module: data.shaderModule,
-      targets: [
-        {
-          format: navigator.gpu.getPreferredCanvasFormat(),
-        },
-      ],
-    },
-    layout: "auto",
-    multisample: {
-      count: 4,
-    },
-    primitive: {
-      topology: "triangle-list",
-    },
-    vertex: {
-      buffers: vertexBuffers,
-      entryPoint: "vertex_main",
-      module: data.shaderModule,
-    },
-  } satisfies GPURenderPipelineDescriptor;
-
-  const renderPipeline = device.createRenderPipeline(pipelineDescriptor);
-
-  const render = {
+  return {
     buffers: {
       index: indexBuffer,
       vertex: positionBuffer,
     },
     count: vertexData.indices.length,
-    pipeline: renderPipeline,
-  };
-
-  return {
-    ...data,
-    renders: [...data.renders, render],
   };
 }

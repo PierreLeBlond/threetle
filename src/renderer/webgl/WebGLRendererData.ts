@@ -1,5 +1,5 @@
 export type WebGLRendererData = {
-  geometries: {
+  geometries: Map<string, {
     buffers: {
       color: WebGLBuffer;
       index: WebGLBuffer;
@@ -7,7 +7,7 @@ export type WebGLRendererData = {
     };
     count: number;
     vao: WebGLVertexArrayObject;
-  }[];
+  }>;
   gl: WebGL2RenderingContext;
   shaderProgram: {
     attributesLocations: {

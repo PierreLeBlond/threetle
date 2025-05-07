@@ -1,4 +1,4 @@
-import { addShaderProgram } from "@/renderer/webgl/utils/addShaderProgram";
+import { addShaderProgram } from "@/renderer/webgl/shaders/addShaderProgram";
 
 import { WebGLRendererData } from "./WebGLRendererData";
 
@@ -15,7 +15,7 @@ export const init = (canvas: HTMLCanvasElement): WebGLRendererData => {
   const shaderProgram = addShaderProgram(gl);
 
   return {
-    geometries: [],
+    geometries: new Map(),
     gl,
     shaderProgram,
   };

@@ -1,7 +1,9 @@
+import { mat4 } from "gl-matrix";
+
 import { WebGPURendererData } from "./WebGPURendererData";
 
-export const draw = (data: WebGPURendererData) => {
-  const { device, multisampleTexture, renders, wgpu } = data;
+export const draw = (data: WebGPURendererData, view: mat4, projection: mat4, geometryIds: string[]) => {
+  const { cameraBindGroup, cameraUniformBuffer, device, multisampleTexture, wgpu } = data;
 
   const clearColor = { a: 1.0, b: 0.0, g: 0.0, r: 0.0 };
 
@@ -23,13 +25,35 @@ export const draw = (data: WebGPURendererData) => {
 
   const commandEncoder = device.createCommandEncoder();
 
+  const cameraBuffer = device.createBuffer({
+    mappedAtCreation: true,
+    size: 2 * 16 * 4,
+    usage: GPUBufferUsage.COPY_SRC,
+  });
+  {
+    const map = new Float32Array(cameraBuffer.getMappedRange());
+    map.set(projection);
+    map.set(view, 16);
+    cameraBuffer.unmap();
+  }
+
+  commandEncoder.copyBufferToBuffer(cameraBuffer, 0, cameraUniformBuffer, 0, 2 * 16 * 4);
+
   const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
 
-  for (const render of renders) {
-    passEncoder.setPipeline(render.pipeline);
-    passEncoder.setVertexBuffer(0, render.buffers.vertex);
-    passEncoder.setIndexBuffer(render.buffers.index, "uint32");
-    passEncoder.drawIndexed(render.count);
+  passEncoder.setPipeline(data.renderPipeline);
+  passEncoder.setBindGroup(0, cameraBindGroup);
+
+  for (const id of geometryIds) {
+    const geometry = data.geometries.get(id);
+
+    if (!geometry) {
+      throw new Error(`Geometry ${id} not found`);
+    }
+
+    passEncoder.setVertexBuffer(0, geometry.buffers.vertex);
+    passEncoder.setIndexBuffer(geometry.buffers.index, "uint32");
+    passEncoder.drawIndexed(geometry.count);
   }
 
   passEncoder.end();

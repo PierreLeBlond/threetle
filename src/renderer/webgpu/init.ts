@@ -1,4 +1,4 @@
-import shaders from "./shaders/shader.wgsl?raw";
+import { addRenderPipeline } from "./shaders/addRenderPipeline";
 import { WebGPURendererData } from "./WebGPURendererData";
 
 export const init = async (canvas: HTMLCanvasElement): Promise<WebGPURendererData> => {
@@ -34,15 +34,25 @@ export const init = async (canvas: HTMLCanvasElement): Promise<WebGPURendererDat
     usage: GPUTextureUsage.RENDER_ATTACHMENT,
   });
 
-  const shaderModule = device.createShaderModule({
-    code: shaders,
-  }) satisfies GPUShaderModule;
+  const { cameraBindGroupLayout, renderPipeline } = addRenderPipeline(device);
+
+  const cameraUniformBuffer = device.createBuffer({
+    size: 2 * 16 * 4,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  });
+
+  const cameraBindGroup = device.createBindGroup({
+    entries: [{ binding: 0, resource: { buffer: cameraUniformBuffer } }],
+    layout: cameraBindGroupLayout,
+  });
 
   return {
+    cameraBindGroup,
+    cameraUniformBuffer,
     device,
+    geometries: new Map(),
     multisampleTexture,
-    renders: [],
-    shaderModule,
+    renderPipeline,
     wgpu,
   };
 };

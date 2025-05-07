@@ -1,6 +1,6 @@
 import { WebGLRendererData } from "./WebGLRendererData";
 
-export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
+export const createSquare = (data: WebGLRendererData) => {
   const { gl, shaderProgram } = data;
 
   const vertexBuffer = gl.createBuffer();
@@ -37,7 +37,7 @@ export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
 
   gl.bindVertexArray(null);
 
-  const geometry = {
+  return {
     buffers: {
       color: colorBuffer,
       index: indexBuffer,
@@ -46,10 +46,5 @@ export const createSquare = (data: WebGLRendererData): WebGLRendererData => {
     count: indices.length,
     vao,
   }
-
-  return {
-    ...data,
-    geometries: [...data.geometries, geometry],
-  };
 };
 

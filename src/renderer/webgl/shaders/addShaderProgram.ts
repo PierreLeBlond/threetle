@@ -1,5 +1,5 @@
-import fragmentShaderSource from "@/renderer/webgl/shaders/shader.frag?raw";
-import vertexShaderSource from "@/renderer/webgl/shaders/shader.vert?raw";
+import fragmentShaderSource from "./glsl/shader.frag?raw";
+import vertexShaderSource from "./glsl/shader.vert?raw";
 
 export const addShaderProgram = (gl: WebGLRenderingContext) => {
    const vertexShader = gl.createShader(gl.VERTEX_SHADER);
