@@ -1,3 +1,4 @@
+import { quat } from "gl-matrix";
 import { getView } from "./camera/getView";
 import { attachControl } from "./controls/attachControl";
 import { createSquare } from "./createSquare";
@@ -15,9 +16,16 @@ export const getViewer = async (viewerElement: HTMLElement): Promise<Viewer> => 
     const delta = now - lastTime;
     lastTime = now;
 
-    data.camera.rotation = control.update(delta);
+    const rotation = control.update(delta);
 
-    const view = getView(data.camera);
+    const finalRotation = quat.create();
+    quat.mul(finalRotation, rotation, data.camera.rotation);
+    const camera = {
+      ...data.camera,
+      rotation: finalRotation
+    }
+
+    const view = getView(camera);
     data.renderer.draw(view, data.camera.projection, data.geometryIds);
 
     requestAnimationFrame(loop);
